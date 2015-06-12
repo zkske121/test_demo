@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+    function contains(target, str, separator) {
+        return separator ?
+            (separator + target + separator).indexOf(separator + str + separator) > -1 :
+            target.indexOf(str) > -1;
+    }
+
+    function startsWith(target, str, ignorecase) {
+    	var start_str = target.substr(0, str.length);
+    	return ignorecase ? 
+    		start_str.toLowerCase() === str.toLowerCase() :
+    		start_str === str;
+    }
+
+    function endsWith(target, str, ignorecase) {
+    	var end_str = target.substring(target.length - str.length);
+    	return ignorecase ? 
+    		end_str.toLowerCase() === str.toLowerCase() :
+    		end_str === str;
+    }
+
+    function repeat1(target, n) {
+    	return (new Array(n + 1)).join(target);
+    }
+
+    function repeat2(target, n) {
+    	return Array.prototype.join.call({
+    		length: n + 1
+    	}, target);
+    }
+
+    var repeat3 = (function() {
+    	var join = Array.prototype.join, obj = {};
+    	return function(target, n) {
+    		obj.length = n + 1;
+    		return join.call(obj, target);
+    	}
+    })();
+
+    function repeat4(target, n) {
+    	var s = target, total = [];
+
+    	while(n > 0) {
+    		if(n % 2 == 1) {
+    			total[total.length] = s; //如果是基数
+    		}
+    		if (n == 1) {
+    			break;
+    		}
+    		s += s;
+    		n = n >> 1; //相当于将n除以2取其商,或说开2次方
+    	}
+
+    	//例:100 = 2的6次方 + 2的5次方 + 2的2次方
+    	total.forEach(function(item) {
+    		console.log(item.length / target.length);
+    	});
+
+    	return total.join('');
+    }
+
+    function repeat5(target, n) {
+    	var s = target, c = s.length * n;
+    	do{
+    		s += s;
+    		console.log(n);
+    	}while(n = n >> 1);
+    	s = s.substring(0, c);
+    	return s;
+    }
+
+    function repeat6(target, n) {
+    	var s = target, total = '';
+    	while(n > 0) {
+    		if(n % 2 == 1) {
+    			total += s;
+    		}
+    		if (n == 1) {
+    			break;
+    		}
+    		s += s;
+    		n = n >> 1;
+    	}
+    	return total;
+    }
+
+    function repeat7(target, n) {
+    	if (n == 1) {
+    		return target;
+    	}
+
+    	var s = repeat7(target, Math.floor(n / 2));
+    	s += s;
+    	if(n % 2) {
+    		s += target;
+    	}
+
+    	return s;
+    }
+
+    function repeat8(target, n) {
+    	return (n <= 0) ? '' : target.concat(repeat8(target, --n));
+    }
+
+    function byteLen1(target) {
+    	var byteLength = target.length, i = 0;
+    	for (; i < target.length; i++) {
+    		if (target.charCodeAt(i) > 255) {
+    			byteLength++;
+    		}
+    	}
+    	return byteLength;
+    }
+
+    function byteLen2(target, fix) {
+    	fix = fix ? fix : 2;
+    	var str = new Array(fix + 1).join('-');
+    	console.log(str);
+    	return target.replace(/[^\x00-\xff]/g, str).length;
+    }
+
+    function truncate(target, length, truncation) {
+    	length =  length || 30;
+    	truncation = truncation === void(0) ? '...' : truncation;
+    	return target.length > length ?
+    		target.slice(0, length - truncation.length) + truncation :
+    		String(target);
+    }
+
+    function camelize(target) {
+    	if (target.indexOf('-') < 0 && target.indexOf('_') < 0) {
+    		return target;
+    	}
+
+    	return target.replace(/[-_][^-_]/g, function(match) {
+    		console.log(match);
+    		return match.charAt(1).toUpperCase();
+    	});
+    }
+
+    function underscored(target) {
+    	return target.replace(/([a-z\d])([A-Z])/g, '$1_$2').replace(/\-/g, '_').toLowerCase();
+    }
+
+    function dasherize(target) {
+    	return underscored(target).replace(/_/g, '-');
+    }
+
+    function capitalize(target) {
+    	return target.charAt(0).toUpperCase() + target.substring(1).toLowerCase();
+    }
+
+    function stripTags(target) {
+    	return String(target || '').replace(/<[^>]+>/g, '');
+    }
+
+    function stripScript(target) {
+    	return String(target || '').replace(/<script[^>]*>([\S\s]*?)<\/script>/img, '');
+    }
+
+    function escapeHTML(target) {
+    	return target.replace(/&/g, '&amp;')
+    		.replace(/</g, '&lt;')
+    		.replace(/>/g, '&gt;')
+    		.replace(/"/g, '&quot;')
+    		.replace(/'/g, '&#39;');
+    }
+
+    function escapeRegExp(target) {
+    	return target.replace(/([-.*+?^${}()|[\]\/\\])/g, '\\$1');
+    }
+
+    function pad1(target, n) {
+    	var zero = new Array(n).join('0');
+    	var str = zero + target;
+    	console.log(str);
+    	var result = str.substr(-n);
+    	return result;
+    }
+
+    function pad2(target, n) {
+    	var num = target.toString().split('').length;
+    	console.log(n + 1 - num);
+    	return Array((n + 1) - target.toString().split('').length).join('0') + target;
+    }
+
+    function pad3(target, n) {
+    	return (Math.pow(10, n) + '' + target).slice(-n);
+    }
+
+    function pad4(target, n) {
+    	return ((1 << n).toString(2) + target).slice(-n);
+    }
+
+    function pad5(target, n) {
+    	return (0..toFixed(n) + target).slice(-n);
+    }
+
+    function pad6(target, n) {
+    	return (1e20 + '' + target).slice(-n);
+    }
+
+    function pad7(target, n) {
+    	var len = target.toString().length;
+    	while(len < n) {
+    		target = '0' + target;
+    		len++;
+    	}
+    	return target;
+    }
+
+    function pad8(target, n, filling, right, radix) {
+    	var num = target.toString(radix || 10);
+    	filling = filling || '0';
+    	while(num.length < n) {
+    		if(!right) {
+    			num = filling + num;
+    		} else {
+    			num += filling;
+    		}
+    	}
+
+    	return num;
+    }
+
+    function wbr(target) {
+    	return String(target)
+    		.replace(/(?:<[^>]+>)|(?:&#?[0-9a-z]{2,6};)|(.{1})/gi, '$&<wbr>')
+    		.replace(/><wbr>/g, '>');
+    }
+
+    function format(str, object) {
+    	var array = Array.prototype.slice.call(arguments, 1);
+    	return str.replace(/\\?\#{([^{}]+)\}/gm, function(match, name) {
+    		if (match.charAt(0) == '\\') {
+    			return match.slice(1);
+    		}
+    		var index = Number(name);
+    		if (index >= 0) {
+    			return array[index];
+    		}
+    		if (object && object[name] !== void 0) {
+    			return object[name];
+    		}
+    		return '';
+    	});
+    }
+
+    var escapeable = /["\\\x00-\x1f\x7f-\x9f]/g,
+    	meta = {'\b': '\\b', '\t': '\\t', '\n': '\\n', '\f': '\\f', '\r': '\\r', '\"': '\\"', '\\': '\\\\'};
+	
+	function quote(target) {
+		if (target.match(escapeable)) {
+			return '"' + target.replace(escapeable, function(a) {
+				var c = meta[a];
+				console.log(c.charCodeAt(0).toString(16));
+				if (typeof c === 'string') {
+					return c;
+				}
+				return '\\u' + ('0000' + c.charCodeAt(0).toString(16)).slice(-4)
+			}) + '"';
+		}
+		return '"' + target + '"';
+	}
+
+	function stringLiteralize(source) {
+		return '"'
+			+ source
+			.replace(/\x5C/g, '\\\\')
+			.replace(/"/g, '\\"')
+			.replace(/\x0A/g, '\\n')
+			.replace(/\x09/g, '\\t')
+			.replace(/\x0D/g, '\\r')
+			+ '"';
+	}
+
+	function trim1(str) {
+		return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+	}
+
+	function trim2(str) {
+		return str.replace(/^\s+/, '').replace(/\s+$/, '');
+	}
+
+	function trim3(str) {
+		return str.substring(Math.max(str.search(/\S/), 0),
+			str.search(/\S\s*$/) + 1);
+	}
+
+	function trim4(str) {
+		return str.replace(/^\s+|\s+$/, '');
+	}
+
+	function trim5(str) {
+		str = str.match(/\S+(?:\s+\S+)*/);
+		return str ? str[0] : '';
+	}
+
+    function trim6(str) {
+        return str.replace(/^\s*(\S*(\s+\S)*)\s*$/, '$1');
+    }
+
+    function trim7(str) {
+        return str.replace(/^\s*(\S*(?:\s+\S+)*)\s*$/, '$1');
+    }
+
+    function trim8(str) {
+        return str.replace(/^\s*((?:[\S\s]*\S)?)\s*$/, '$1');
+    }
+
+    function trim9(str) {
+        return str.replace(/^\s*([\S\s]*?)\s*$/, '$1');
+    }
+
+    function trim10(str) {
+        var whitespace = ' \n\r\t\f\x0b\xa0\u2000\u2001\u2002\u2003\n\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u200b\u2028\u2029\u3000';
+        for(var i = 0; i < str.length; i++) {
+            if(whitespace.indexOf(str.charAt(i)) === -1) {
+                str = str.substring(i);
+                break;
+            }
+        }
+
+        for(i = str.length - 1; i >= 0; i--) {
+            if(whitespace.indexOf(str.charAt(i)) === -1) {
+                str = str.substring(0, i + 1);
+                break;
+            }
+        }
+
+        return whitespace.indexOf(str.charAt(0)) === -1 ? str : '';
+    }
+
+    function trim11(str) {
+        str = str.replace(/^\s+/, '');
+        for(var i = str.length - 1; i >= 0; i--) {
+            if(/\S/.test(str.charAt(i))) {
+                str = str.substring(0, i + 1);
+                break;
+            }
+        }
+        return str;
+    }
+
+    function trim12(str) {
+        var str = str.replace(/^\s\s*/, ''),
+        ws = /\s/,
+        i = str.length;
+        while(ws.test(str.charAt(--i)));
+        return str.slice(0, i + 1);
+    }
+
+    function trim13(str) {
+        var m = str.length;
+        for(var i = -1; str.charCodeAt(++i) <= 32;);
+        for(var j = m - 1; j > i && str.charCodeAt(j) <= 32; j--);
+        return str.slice(i, j + 1);
+    }
+
+    </script>
+</body>
+
+</html>

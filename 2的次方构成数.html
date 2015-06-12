@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		function calc(num) {
+			var n = 0;
+			while(num > 0) {
+				num % 2 == 1 && (console.log(n));
+				n++;
+				num = num >> 1;
+			}
+		}
+
+		calc(100);
+	</script>
+</body>
+</html>

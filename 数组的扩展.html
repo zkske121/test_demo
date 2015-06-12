@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+	Array.prototype.indexOf = function(item, index) {
+		var n = this.length, i = ~~index;
+		if(i < 0) {
+			i += n; 
+		}
+		for(; i < n; i++) {
+			if(this[i] === item) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	Array.prototype.lastIndexOf = function(item, index) {
+		var n = this.length, i = index == null ? n - 1 : index;
+		if (i < 0) {
+			i = Math.max(0, n + i);
+		}
+		for(; i >= 0; i--) {
+			if(this[i] === item) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	function iterator(vars, body, ret) {
+		var fun = 'for(var ' + vars + 'i=0,n=this.length;i<n;i++){' +
+				body.replace('_', '((i in this) && fn.call(scope, this[i], i, this))')
+				+ '}' + ret;
+		return Function('fn, scope', fun);
+	}
+
+	Array.prototype.forEach = iterator('', '_', '');
+	console.log(Array.prototype.forEach);
+
+	Array.prototype.filter = iterator('r=[],j=0,', 'if(_)r[j++]=this[i]', 'return r');
+	Array.prototype.filter = function(fn, scope) {
+		for (var r = [], j = 0, i = 0, n = this.length; i < n; i++) {
+		    var tmp = fn.call(scope, this[i], i, this);
+		    if (((i in this) && tmp)) 
+		    	r[j++] = this[i];
+		}
+		return r;
+	}
+	console.log(Array.prototype.filter);
+
+	Array.prototype.map = iterator('r=[],', 'r[i]=_', 'return r');
+
+	Array.prototype.some = iterator('', 'if(_)return true', 'return false');
+
+	Array.prototype.every = iterator('', 'if(!_)return false', 'return true');
+
+	Array.prototype.reduce = function(fn, lastResult, scope) {
+		if(this.length == 0) {
+			return lastResult;
+		}
+		var i = lastResult !== undefined ? 0 : 1;
+		var result = lastResult !== undefined ? lastResult : this[0];
+		for(var n = this.length; i < n; i++) {
+			result = fn.call(scope, result, this[i], i, this);
+		}
+		return result;
+	}
+
+	Array.prototype.reduceRight = function(fn, lastResult, scope) {
+		var array = this.concat().reverse();
+		return array.reduce(fn, lastResult, scope);
+	}
+
+	function contains(target, item) {
+		return target.indexOf(item) > -1;
+	}
+
+	function removeAt(target, index) {
+		return !!target.splice(index, 1).length;
+	}
+
+	function remove(target, item) {
+		var index = target.indexOf(item);
+		console.log(~index);
+		if(~index) {
+			return removeAt(target, index);
+		}
+		return false;
+	}
+
+	function shuffle(target) {
+		var j, x, i = target.length;
+		do{
+			j = parseInt(Math.random() * i);
+			x = target[--i];
+			target[i] = target[j];
+			target[j] = x;
+		}while(i > 0);
+
+		// for(; i > 0; j = parseInt(Math.random() * i),
+			// x = target[--i], target[i] = target[j], target[j] = x){}
+		return target;
+	}
+
+	function random(target) {
+		return target[Math.floor(Math.random() * target.length)];
+	}
+
+	function flatten(target) {
+		var result = [];
+		target.forEach(function(item) {
+			if(Array.isArray(item)) {
+				result = result.concat(flatten(item));
+			} else {
+				result.push(item);
+			}
+		});
+		return result;
+	}
+
+	function unique1(target) {
+		var result = [];
+		loop: 
+		for(var i = 0, n = target.length; i < n; i++) {
+			for(var x = i + 1; x < n; x++) {
+				if(target[x] == target[i]) {
+					continue loop;
+				}
+			}
+			result.push(target[i]);	
+		}
+		return result;
+	}
+
+	function unique2(target) {
+		var temp;
+		target.forEach(function(item, i, arr) {
+			while(arr.indexOf(item) != (temp = arr.lastIndexOf(item))){
+				target.splice(temp, 1);
+			}
+		});
+		return target;
+	}
+	</script>
+</body>
+</html>

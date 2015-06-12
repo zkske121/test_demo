@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>clear file</title>
+
+</head>
+<body>
+	<div id="container">
+		<input type="file" id="file">
+	</div>
+	
+	<br />
+	<button id="clear">clear</button>
+
+	<script>
+	var oFile = document.getElementById('file');
+	var oDiv = document.getElementById('container');
+	var oClear = document.getElementById('clear');
+
+	oClear.onclick = function() {
+		// alert();
+		// oDiv.innerHTML = '<input type="file" id="file">';
+		clear(oFile);
+	}
+
+	function clear(file) {
+		var form = document.createElement('form');
+		document.body.appendChild(form);
+		var position = file.nextSibling;
+		form.appendChild(file);
+		form.reset();
+		position.parentNode.insertBefore(file, position);
+		document.body.removeChild(form);
+	}
+
+	// clear(oFile);
+	</script>
+</body>
+</html>

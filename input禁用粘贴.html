@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<input type="password">
+	<script type="text/javascript">
+	window.onload = function() {
+		var input = document.getElementsByTagName('input')[0];
+		var len = input.value.length;
+
+		input.oninput = function() {
+			if (this.value.length - len > 1) {
+				this.value = this.value.slice(0, len);
+			}
+			len = this.value.length;
+		}
+	}
+	</script>
+</body>
+</html>

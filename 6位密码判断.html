@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+   
+    <script type="text/javascript">
+        var str = "111111"; 
+        
+        /*function check(str) {
+            if(str.length != 6) return false;
+
+            var temp = {};
+            temp.asc = 5;
+            temp.des = 5;
+            temp.repeat = 2;
+
+            var num = 0;
+
+            str.split('').reduce(function(prev, next) {
+                num = prev - next;
+
+                if(isNaN(num) && prev == next){
+                    num = 0;
+                }
+
+                if (temp.repeat) {
+                    switch(num) {
+                        case 1:
+                            temp.des --;
+                            temp.repeat = 2;
+                            break;
+                        case -1:
+                            temp.asc --;
+                            temp.repeat = 2;
+                            break;
+                        case 0:
+                            temp.repeat --;
+                            break;
+                        default:
+                            temp.repeat = 2;
+                            break;
+                    }
+                }
+                
+                return next;
+            });
+
+             console.log(temp);
+
+            if (!temp.asc || !temp.des || !temp.repeat) {
+                return false;
+            }
+
+            return true;
+        }*/
+
+        var str = "123123";
+
+        function check(str) {
+            return !(str.length != 6 
+                    || '0123456789'.indexOf(str) > -1
+                    || '9876543210'.indexOf(str) > -1
+                    || /(\d)\1\1/g.test(str)
+                    || /(\d{3}\1)/g.test(str)
+                );
+        }
+
+        console.log(check(str));
+        
+        
+    </script>
+</body>
+</html>

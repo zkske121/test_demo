@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>面向对象时钟</title>
+
+	<script type="text/javascript">
+	function Clock(target, speed) {
+		this.target = target;
+		this.speed  = speed;
+		this.timer  = null;
+		this.date   = null;
+	}
+
+	Clock.prototype.go = function() {
+
+	}
+	Clock.prototype = {
+		constructor : Clock,
+		format : function() {
+			return [].map.call(arguments, function(item) {
+					return item > 9 ? item : '0' + item;
+				}).join(':');
+		},
+		go : function() {
+			this.change(this);
+			this.timer = setInterval(this.change(this), this.speed);
+		},
+		change : function(that) {
+			return function() {
+				that.date = new Date();
+				that.target.innerHTML = that.format(that.date.getHours(), that.date.getMinutes(), that.date.getSeconds());
+			}
+		},
+		end : function(that) {
+			return function() {
+				clearInterval(that.timer);
+			}
+		}
+	}
+
+	window.onload = function() {
+		var clock = new Clock(document.getElementById('div1'), 1000);
+		clock.go();
+		console.log(clock, clock.constructor);
+
+		//setTimeout(clock.end(clock), 10000);
+	}
+	</script>
+</head>
+
+<body>
+<div id="div1"></div>
+</body>
+</html>
